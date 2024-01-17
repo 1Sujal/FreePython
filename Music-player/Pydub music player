@@ -2,6 +2,7 @@ import os
 import random
 from pydub import AudioSegment
 from tkinter import *
+import tkinter as tk
 from pydub.playback import play
 
 def find_mp3_files(directories):
@@ -13,9 +14,7 @@ def find_mp3_files(directories):
                 mp3_files.append(os.path.join(root, file))
                 
     return mp3_files
-
 previous_file = ""
-
 def get_duration(file_path):
     audio = AudioSegment.from_file(file_path)
     return len(audio) / 1000
@@ -32,7 +31,6 @@ def play_next_song():
         
     else:
         print("No MP3 files found.")
-
 def Dont_repeat():
     global previous_file
     if mp3_files_filtered:
@@ -46,22 +44,21 @@ def Dont_repeat():
 
     else:
         print("No MP3 files found.")
+def song():
+    while True:
+        play_next_song()
+def repeat():
+    while True:
+        Dont_repeat()
 
-def schedule_song():
-    play_next_song()
-    root.after(5000, schedule_song)  # Schedule the next song after 5000 milliseconds (5 seconds)
-
-def schedule_repeat():
-    Dont_repeat()
-    root.after(5000, schedule_repeat)  # Schedule the next repeat after 5000 milliseconds (5 seconds)
-
-root = Tk()
-
-button_play_pause = Button(text="Repeat list", command=schedule_song)
-button_dontrepeat = Button(text="Play", command=schedule_repeat)
+button_play_pause = Button( text="Repeat list", command=song)
+button_dontrepeat = Button(text="Play", command=repeat)
 
 button_play_pause.pack(side=LEFT, padx=10)
 button_dontrepeat.pack(side=LEFT, padx=10)
 
-root.after(0, schedule_song)  # Start playing the first song immediately
-root.mainloop()
+
+if __name__ == "__main__":
+    root = Tk()
+    root.mainloop()
+
